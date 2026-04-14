@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Against Climate Change | Power BI Project</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:       #2e7d32;
+      --green-light: #43a047;
+      --green-pale:  #e8f5e9;
+      --blue:        #1565c0;
+      --blue-light:  #1e88e5;
+      --blue-pale:   #e3f2fd;
+      --dark:        #1a1a2e;
+      --text:        #333;
+      --muted:       #666;
+      --white:       #ffffff;
+      --card-shadow: 0 4px 20px rgba(0,0,0,0.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text);
+      background: #f4f7f6;
+      line-height: 1.7;
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--dark);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    nav .logo {
+      color: var(--white);
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    nav .logo span { color: #69f0ae; }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    nav ul a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    nav ul a:hover { color: #69f0ae; }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #0a2342 0%, #1a3a5c 40%, #2e7d32 100%);
+      color: var(--white);
+      padding: 6rem 2rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(105, 240, 174, 0.2);
+      border: 1px solid rgba(105, 240, 174, 0.5);
+      color: #69f0ae;
+      padding: 0.3rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .hero h1 span { color: #69f0ae; }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.8);
+      max-width: 700px;
+      margin: 0 auto 2rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: #69f0ae;
+      color: var(--dark);
+    }
+
+    .btn-primary:hover {
+      background: #b9f6ca;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(105,240,174,0.4);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,0.4);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--white);
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-2px);
+    }
+
+    /* ── Disclaimer Banner ── */
+    .disclaimer {
+      background: linear-gradient(135deg, #e65100, #bf360c);
+      color: var(--white);
+      padding: 1.2rem 2rem;
+      text-align: center;
+    }
+
+    .disclaimer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      text-align: left;
+    }
+
+    .disclaimer-icon {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .disclaimer h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      letter-spacing: 0.5px;
+    }
+
+    .disclaimer p {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.6;
+    }
+
+    /* ── Meta strip ── */
+    .meta-strip {
+      background: var(--white);
+      border-bottom: 1px solid #e0e0e0;
+      padding: 1rem 2rem;
+    }
+
+    .meta-strip-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .meta-item strong { color: var(--text); }
+
+    /* ── Section wrapper ── */
+    .section {
+      padding: 4rem 2rem;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: 0.5rem;
+    }
+
+    .section h2 {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+
+    .section h2 span { color: var(--green-light); }
+
+    .section-intro {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 750px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── Team Cards ── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .team-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s;
+    }
+
+    .team-card:hover { transform: translateY(-5px); }
+
+    .avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .avatar-green  { background: linear-gradient(135deg, #2e7d32, #66bb6a); }
+    .avatar-blue   { background: linear-gradient(135deg, #1565c0, #42a5f5); }
+    .avatar-teal   { background: linear-gradient(135deg, #00695c, #26a69a); }
+
+    .team-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .team-card .student-id {
+      font-size: 0.82rem;
+      color: var(--muted);
+      background: #f0f0f0;
+      display: inline-block;
+      padding: 0.2rem 0.7rem;
+      border-radius: 50px;
+    }
+
+    /* ── Project Info Cards ── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .info-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      border-left: 4px solid var(--green);
+    }
+
+    .info-card .info-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .info-card .info-value {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    /* ── Topics ── */
+    .topics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .topic-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 1.8rem;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      border-top: 4px solid transparent;
+    }
+
+    .topic-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.13);
+    }
+
+    .topic-card.green  { border-top-color: var(--green); }
+    .topic-card.blue   { border-top-color: var(--blue); }
+    .topic-card.teal   { border-top-color: #00897b; }
+    .topic-card.orange { border-top-color: #e65100; }
+    .topic-card.purple { border-top-color: #6a1b9a; }
+    .topic-card.cyan   { border-top-color: #00838f; }
+
+    .topic-icon { font-size: 2rem; margin-bottom: 1rem; }
+
+    .topic-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.7rem;
+      color: var(--dark);
+    }
+
+    .topic-card p { font-size: 0.92rem; color: var(--muted); }
+
+    /* ── Key Stats ── */
+    .stats-bg {
+      background: linear-gradient(135deg, #0a2342, #1a3a5c);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #69f0ae;
+      line-height: 1.1;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.7);
+      margin-top: 0.4rem;
+    }
+
+    /* ══════════════════════════════════════
+       PDF VIEWER SECTION
+    ══════════════════════════════════════ */
+    .pdf-section {
+      background: #1a1a2e;
+      padding: 4rem 2rem;
+    }
+
+    .pdf-section .section-label { color: #69f0ae; }
+
+    .pdf-section h2 {
+      color: var(--white);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .pdf-section h2 span { color: #69f0ae; }
+
+    .pdf-section .section-intro {
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 2rem;
+    }
+
+    /* Toolbar above PDF */
+    .pdf-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-bottom: none;
+      border-radius: 12px 12px 0 0;
+      padding: 0.9rem 1.4rem;
+    }
+
+    .pdf-toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.88rem;
+    }
+
+    .pdf-file-icon {
+      background: #e53935;
+      color: var(--white);
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 0.25rem 0.45rem;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .pdf-filename {
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .pdf-toolbar-right {
+      display: flex;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+    }
+
+    .pdf-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 1rem;
+      border-radius: 6px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .pdf-btn-download {
+      background: #69f0ae;
+      color: var(--dark);
+    }
+
+    .pdf-btn-download:hover {
+      background: #b9f6ca;
+      transform: translateY(-1px);
+    }
+
+    .pdf-btn-new-tab {
+      background: rgba(255,255,255,0.1);
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .pdf-btn-new-tab:hover {
+      background: rgba(255,255,255,0.18);
+      transform: translateY(-1px);
+    }
+
+    /* The iframe wrapper */
+    .pdf-frame-wrapper {
+      position: relative;
+      border-radius: 0 0 12px 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: #2c2c3e;
+      /* Control the visible height of the viewer */
+      height: 850px;
+    }
+
+    .pdf-frame-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* Fallback message inside wrapper if iframe fails */
+    .pdf-fallback {
+      display: none; /* shown via JS if needed */
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      height: 100%;
+      text-align: center;
+      padding: 3rem;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .pdf-fallback .fallback-icon { font-size: 4rem; }
+    .pdf-fallback h3 { color: var(--white); font-size: 1.2rem; }
+    .pdf-fallback p  { font-size: 0.9rem; max-width: 420px; }
+
+    /* Info note below PDF */
+    .pdf-note {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: rgba(255,255,255,0.45);
+      font-size: 0.82rem;
+    }
+
+    /* ── Data Sources ── */
+    .sources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .source-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 1.2rem 1.5rem;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      transition: transform 0.2s;
+    }
+
+    .source-card:hover { transform: translateX(4px); }
+
+    .source-num {
+      background: var(--green-pale);
+      color: var(--green);
+      font-weight: 700;
+      font-size: 0.85rem;
+      min-width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .source-card h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.2rem; }
+
+    .source-card a {
+      font-size: 0.8rem;
+      color: var(--blue-light);
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .source-card a:hover { text-decoration: underline; }
+
+    /* ── Conclusion ── */
+    .conclusion-box {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: var(--card-shadow);
+      border-left: 6px solid var(--green);
+    }
+
+    .conclusion-box p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .conclusion-box p:last-child { margin-bottom: 0; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 2.5rem 2rem;
+      font-size: 0.9rem;
+    }
+
+    footer strong { color: #69f0ae; }
+
+    /* ── Utilities ── */
+    .bg-pale-green { background: var(--green-pale); }
+    .bg-white       { background: var(--white); }
+
+    .divider {
+      height: 4px;
+      background: linear-gradient(90deg, var(--green), var(--blue-light));
+      border: none;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .pdf-frame-wrapper { height: 500px; }
+      .pdf-toolbar { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 600px) {
+      nav ul { display: none; }
+      .hero { padding: 4rem 1rem 3rem; }
+      .section { padding: 3rem 1rem; }
+      .pdf-section { padding: 3rem 1rem; }
+      .conclusion-box { padding: 2rem 1.5rem; }
+      .disclaimer-inner { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════ NAV ═══════════════════════════ -->
+  <nav>
+    <div class="logo">
+      🌍 <span>Climate</span>Analysis
+    </div>
+    <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#topics">Topics</a></li>
+      <li><a href="#stats">Key Stats</a></li>
+      <li><a href="#report">Report</a></li>
+      <li><a href="#sources">Sources</a></li>
+      <li><a href="#conclusion">Conclusion</a></li>
+    </ul>
+  </nav>
+
+  <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
+  <section class="hero">
+    <div class="hero-badge">Power BI Project · Group 10</div>
+    <h1>Against <span>Climate Change</span></h1>
+    <p>
+      A deliberate exercise in data storytelling — using real-world climate datasets to
+      construct a counter-narrative, demonstrating how data can be framed to support
+      biased arguments.
+    </p>
+    <div class="hero-buttons">
+      <a href="./assets/report.pdf" download class="btn btn-primary">
+        ⬇️ Download PDF Report
+      </a>
+      <a href="https://github.com/sajanyerra/climate-change"
+         class="btn btn-outline" target="_blank">
+        ⭐ View on GitHub
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ DISCLAIMER BANNER ═══════════════════════════ -->
+  <div class="disclaimer">
+    <div class="disclaimer-inner">
+      <div class="disclaimer-icon">⚠️</div>
+      <div>
+        <h4>Academic Exercise Disclaimer</h4>
+        <p>
+          This project was completed as part of module <strong>MI6201 – Data and Analytical
+          Decision Making</strong> at the University of Limerick. The arguments presented
+          here are intentionally constructed to demonstrate how data can be selectively used
+          to build biased or misleading narratives. <strong>The views expressed do not
+          reflect the scientific consensus on climate change</strong>, which is well-established
+          and supported by overwhelming empirical evidence.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════ META STRIP ═══════════════════════════ -->
+  <div class="meta-strip">
+    <div class="meta-strip-inner">
+      <div class="meta-item">
+        🏫 <span><strong>University of Limerick</strong> – Kemmy Business School</span>
+      </div>
+      <div class="meta-item">
+        📘 <span>Module: <strong>MI6201</strong> – Data &amp; Analytical Decision Making</span>
+      </div>
+      <div class="meta-item">
+        👥 <span>Group: <strong>10</strong></span>
+      </div>
+      <div class="meta-item">
+        🛠️ <span>Tool: <strong>Microsoft Power BI</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════ OVERVIEW ═══════════════════════════ -->
+  <section class="section bg-white" id="overview">
+    <div class="section-inner">
+      <div class="section-label">Project Overview</div>
+      <h2>What is This <span>Project About?</span></h2>
+      <p class="section-intro">
+        This project explores the usage of data to construct an argument that climate change
+        is not as severe as commonly portrayed. The aim was to demonstrate how data visualisation
+        and selective framing can be used to create biased narratives — a critical skill for
+        any data analyst to understand and identify.
+      </p>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-label">University</div>
+          <div class="info-value">University of Limerick</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">School</div>
+          <div class="info-value">Kemmy Business School</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Module Code</div>
+          <div class="info-value">MI6201</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Group Number</div>
+          <div class="info-value">Group 10</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Data Range</div>
+          <div class="info-value">1850 – 2023</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Tool Used</div>
+          <div class="info-value">Microsoft Power BI</div>
+        </div>
+      </div>
+
+      <!-- Team -->
+      <div class="section-label">Meet the Team</div>
+      <h2>Group <span>Members</span></h2>
+      <br/>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="avatar avatar-green">SY</div>
+          <h3>Sai Sajan Yerra</h3>
+          <span class="student-id">23237104</span>
+        </div>
+        <div class="team-card">
+          <div class="avatar avatar-blue">AA</div>
+          <h3>Altaf Ahmed</h3>
+          <span class="student-id">23022213</span>
+        </div>
+        <div class="team-card">
+          <div class="avatar avatar-teal">SP</div>
+          <h3>Srushti Sameer Potnurwar</h3>
+          <span class="student-id">23216301</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- ═══════════════════════════ TOPICS ═══════════════════════════ -->
+  <section class="section bg-pale-green" id="topics">
+    <div class="section-inner">
+      <div class="section-label">Research Scope</div>
+      <h2>Topics <span>Covered</span></h2>
+      <p class="section-intro">
+        The analysis spans six key research areas, each using real datasets to
+        construct a carefully framed narrative — illustrating the power and danger
+        of selective data presentation.
+      </p>
+
+      <div class="topics-grid">
+
+        <div class="topic-card green">
+          <div class="topic-icon">🌡️</div>
+          <h3>Temperature Deviation (1850–2022)</h3>
+          <p>
+            Analysing global temperature variability relative to the 20th-century mean.
+            Framed to show that the maximum deviation of 1.03°C is within Paris Agreement
+            targets and therefore not alarming.
+          </p>
+        </div>
+
+        <div class="topic-card blue">
+          <div class="topic-icon">🏭</div>
+          <h3>Greenhouse Gas Emissions Over Time</h3>
+          <p>
+            CO₂ rose 20× from 1900 to 2021, yet temperature increases appear
+            disproportionately small — used to argue a weak causal link between
+            emissions and warming.
+          </p>
+        </div>
+
+        <div class="topic-card teal">
+          <div class="topic-icon">🇰🇷</div>
+          <h3>South Korea as a Case Study</h3>
+          <p>
+            South Korea's GHG trends mirror global patterns, yet temperature deviations
+            remain inconsistent — presented as further evidence against a strong
+            CO₂-temperature relationship.
+          </p>
+        </div>
+
+        <div class="topic-card orange">
+          <div class="topic-icon">🌧️</div>
+          <h3>Irish Precipitation Patterns</h3>
+          <p>
+            Rainfall data from Irish meteorological stations (1960–2020) shows no
+            significant deviation, used to suggest GHG increases haven't impacted
+            local climate patterns.
+          </p>
+        </div>
+
+        <div class="topic-card purple">
+          <div class="topic-icon">🌋</div>
+          <h3>Natural Events: Volcanoes &amp; ENSO</h3>
+          <p>
+            Volcanic eruptions and El Niño / La Niña cycles are highlighted to argue
+            that natural forces are dominant drivers of climate change, not human activity.
+          </p>
+        </div>
+
+        <div class="topic-card cyan">
+          <div class="topic-icon">🌿</div>
+          <h3>Positive Impacts of Elevated CO₂</h3>
+          <p>
+            Elevated CO₂ boosts plant photosynthesis by ~40%, improves crop yields,
+            and reduces cold-related deaths — framed to suggest climate change has
+            net positive effects.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- ═══════════════════════════ KEY STATS ═══════════════════════════ -->
+  <section class="section stats-bg" id="stats">
+    <div class="section-inner">
+      <div class="section-label" style="color:#69f0ae;">Key Findings</div>
+      <h2 style="color:#fff;">By the <span style="color:#69f0ae;">Numbers</span></h2>
+      <p class="section-intro" style="color:rgba(255,255,255,0.7); margin-bottom:2.5rem;">
+        Headline statistics drawn from the Power BI analysis — presented selectively
+        as part of the project's data framing exercise.
+      </p>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">1.03°C</div>
+          <div class="stat-label">Max temperature deviation<br/>recorded (1850–2022)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">20×</div>
+          <div class="stat-label">Increase in CO₂ emissions<br/>(1900–2021)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">0.04%</div>
+          <div class="stat-label">CO₂'s share of<br/>total atmospheric gases</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">5.8%</div>
+          <div class="stat-label">Global CO₂ decline in 2020<br/>due to COVID-19 pandemic</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">+40%</div>
+          <div class="stat-label">Boost in plant growth<br/>when CO₂ is doubled</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">100 ppm</div>
+          <div class="stat-label">Increase in atmospheric CO₂<br/>(1958–2023)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- ═══════════════════════════ PDF REPORT VIEWER ═══════════════════════════ -->
+  <section class="pdf-section" id="report">
+    <div class="section-inner">
+      <div class="section-label">Full Report</div>
+      <h2 style="color:#fff;">View the Power BI <span>Export</span></h2>
+      <p class="section-intro">
+        The full Power BI report exported as a PDF is embedded below.
+        You can scroll through all pages directly, open it in a new tab,
+        or download it to your device.
+      </p>
+
+      <!-- Toolbar -->
+      <div class="pdf-toolbar">
+        <div class="pdf-toolbar-left">
+          <span class="pdf-file-icon">PDF</span>
+          <span class="pdf-filename">climate-change-powerbi-report.pdf</span>
+        </div>
+        <div class="pdf-toolbar-right">
+          <a href="./assets/report.pdf"
+             target="_blank"
+             class="pdf-btn pdf-btn-new-tab">
+            ↗️ Open in New Tab
+          </a>
+          <a href="./assets/report.pdf"
+             download="climate-change-powerbi-report.pdf"
+             class="pdf-btn pdf-btn-download">
+            ⬇️ Download PDF
+          </a>
+        </div>
+      </div>
+
+      <!-- PDF iframe -->
+      <div class="pdf-frame-wrapper" id="pdfWrapper">
+        <iframe
+          id="pdfViewer"
+          src="./assets/report.pdf"
+          title="Climate Change Power BI Report PDF"
+          allowfullscreen>
+        </iframe>
+
+        <!-- Fallback shown if iframe cannot render PDF -->
+        <div class="pdf-fallback" id="pdfFallback">
+          <div class="fallback-icon">📄</div>
+          <h3>PDF Preview Unavailable</h3>
+          <p>
+            Your browser may not support embedded PDFs.
+            Use the buttons above to open or download the report directly.
+          </p>
+          <a href="./assets/report.pdf"
+             download="climate-change-powerbi-report.pdf"
+             class="pdf-btn pdf-btn-download"
+             style="margin-top:0.5rem;">
+            ⬇️ Download PDF
+          </a>
+        </div>
+      </div>
+
+      <!-- Note -->
+      <div class="pdf-note">
+        <span>ℹ️</span>
+        <span>
+          If the PDF does not load, ensure the file is placed at
+          <code style="background:rgba(255,255,255,0.08); padding:0.1rem 0.4rem; border-radius:4px;">
+            /assets/report.pdf
+          </code>
+          in your repository.
+        </span>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- ═══════════════════════════ SOURCES ═══════════════════════════ -->
+  <section class="section bg-pale-green" id="sources">
+    <div class="section-inner">
+      <div class="section-label">Data Provenance</div>
+      <h2>Data <span>Sources</span></h2>
+      <p class="section-intro">
+        All datasets used in this project are sourced from reputable academic,
+        governmental, and scientific organisations.
+      </p>
+
+      <div class="sources-grid">
+
+        <div class="source-card">
+          <div class="source-num">1</div>
+          <div>
+            <h4>Irish Rainfall Data</h4>
+            <a href="https://data.cso.ie/table/MTM01" target="_blank">data.cso.ie</a>
+          </div>
+        </div>
+
+        <div class="source-card">
+          <div class="source-num">2</div>
+          <div>
+            <h4>South Korea Heat Wave Data</h4>
+            <a href="https://data.kma.go.kr" target="_blank">data.kma.go.kr</a>
+          </div>
+        </div>
+
+        <div class="source-card">
+          <div class="source-num">3</div>
+          <div>
+            <h4>South Korea CO₂ Emissions</h4>
+            <a href="https://ourworldindata.org/co2/country/south-korea" target="_blank">ourworldindata.org</a>
+          </div>
+        </div>
+
+        <div class="source-card">
+          <div class="source-num">6</div>
+          <div>
+            <h4>Deaths vs Temperature</h4>
+            <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4521077/" target="_blank">ncbi.nlm.nih.gov</a>
+          </div>
+        </div>
+
+        <div class="source-card">
+          <div class="source-num">7</div>
+          <div>
+            <h4>Coral Calcification Data</h4>
+            <a href="https://gml.noaa.gov/icdc7/proceedings/abstracts/mcneil1HI75.pdf" target="_blank">gml.noaa.gov</a>
+          </div>
+        </div>
+
+        <div class="source-card">
+          <div class="source-num">8</div>
+          <div>
+            <h4>Greenland Ice Sheet Data</h4>
+            <a href="https://www.ncei.noaa.gov/access/paleo-search/" target="_blank">ncei.noaa.gov (NOAA)</a>
+          </div>
+        </div>
+
+        <div class="source-card">
+          <div class="source-num">10</div>
+          <div>
+            <h4>El Niño / La Niña ONI Index</h4>
+            <a href="https://ggweather.com/enso/oni.htm" target="_blank">ggweather.com</a>
+          </div>
+        </div>
+
+        <div class="source-card">
+          <div class="source-num">11</div>
+          <div>
+            <h4>Volcanic Eruption Data</h4>
+            <a href="https://www.ngdc.noaa.gov/hazel/view/hazards/volcano/event-data" target="_blank">ngdc.noaa.gov</a>
+          </div>
+        </div>
+
+        <div class="source-card">
+          <div class="source-num">14</div>
+          <div>
+            <h4>Global CO₂ Levels</h4>
+            <a href="https://ourworldindata.org/co2-dataset-sources" target="_blank">ourworldindata.org</a>
+          </div>
+        </div>
+
+        <div class="source-card">
+          <div class="source-num">15</div>
+          <div>
+            <h4>Global Temperature Anomalies (NOAA)</h4>
+            <a href="https://www.ncei.noaa.gov/access/monitoring/global-temperature-anomalies/anomalies" target="_blank">NOAA NCEI</a>
+          </div>
+        </div>
+
+        <div class="source-card">
+          <div class="source-num">19</div>
+          <div>
+            <h4>CO₂ Emissions 2020 Review</h4>
+            <a href="https://www.iea.org/articles/global-energy-review-co2-emissions-in-2020" target="_blank">iea.org</a>
+          </div>
+        </div>
+
+        <div class="source-card">
+          <div class="source-num">20</div>
+          <div>
+            <h4>Cloud Development &amp; Water Vapor</h4>
+            <a href="https://www.weather.gov/source/zhu/ZHU_Training_Page/clouds/cloud_development/clouds.htm" target="_blank">weather.gov</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- ═══════════════════════════ CONCLUSION ═══════════════════════════ -->
+  <section class="section bg-white" id="conclusion">
+    <div class="section-inner">
+      <div class="section-label">Summary</div>
+      <h2>Our <span>Conclusion</span></h2>
+      <br/>
+      <div class="conclusion-box">
+        <p>
+          The climate is a <strong>dynamic, intricate system</strong> shaped by various natural forces.
+          Over geological timeframes, Earth has experienced multiple climate variations caused by orbital
+          movements, solar radiation fluctuations, and volcanic activity — factors that predate
+          industrialisation by millions of years.
+        </p>
+        <p>
+          Although human activities such as deforestation and combustion of fossil fuels contribute
+          to climate change, this project demonstrates how data can be framed to make their effects
+          appear less significant when placed against a backdrop of <strong>natural climate variability</strong>.
+        </p>
+        <p>
+          The project also highlights often-overlooked <strong>positive feedback loops</strong> from
+          elevated CO₂ — including enhanced crop productivity, reduced cold-related mortality, and
+          short-term benefits to coral calcification — to show how cherry-picking data can create
+          a compelling but incomplete picture.
+        </p>
+        <p>
+          Ultimately, this is an exercise in <strong>data literacy and critical thinking</strong>.
+          Understanding how narratives are built from data is essential for any analyst —
+          both to avoid creating misleading visualisations and to recognise them when encountered.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+  <footer>
+    <p>
+      🌍 <strong>Against Climate Change</strong> · Power BI Project ·
+      University of Limerick – Kemmy Business School
+    </p>
+    <p style="margin-top:0.5rem;">
+      Module MI6201 &nbsp;|&nbsp; Group 10 &nbsp;|&nbsp;
+      Sai Sajan Yerra · Altaf Ahmed · Srushti Sameer Potnurwar
+    </p>
+    <p style="margin-top:0.5rem; font-size:0.8rem; opacity:0.5;">
+      Built with HTML &amp; CSS · Hosted via GitHub Pages ·
+      <a href="https://github.com/sajanyerra/climate-change"
+         target="_blank"
+         style="color:inherit;">
+        github.com/sajanyerra/climate-change
+      </a>
+    </p>
+  </footer>
+
+  <!-- ═══════════════════════════ PDF FALLBACK SCRIPT ═══════════════════════════ -->
+  <script>
+    /*
+      If the browser cannot load the PDF in the iframe,
+      hide the iframe and show the fallback message instead.
+    */
+    const viewer   = document.getElementById('pdfViewer');
+    const fallback = document.getElementById('pdfFallback');
+
+    viewer.addEventListener('error', () => {
+      viewer.style.display   = 'none';
+      fallback.style.display = 'flex';
+    });
+
+    /*
+      Some browsers (especially mobile) block iframe PDF rendering entirely.
+      Detect those and proactively show the fallback.
+    */
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isMobile) {
+      viewer.style.display   = 'none';
+      fallback.style.display = 'flex';
+    }
+  </script>
+
+</body>
+</html>
