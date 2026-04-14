@@ -47,9 +47,9 @@ The exercise sharpens critical thinking around:
 
 | Name | Student ID |
 |---|---|
-| Sai Sajan Yerra | 23237104 |
-| Altaf Ahmed | 23022213 |
-| Srushti Sameer Potnurwar | 23216301 |
+| Sai Sajan Yerra |
+| Altaf Ahmed |
+| Srushti Sameer Potnurwar |
 
 ---
 
@@ -79,7 +79,7 @@ Atmospheric CO₂ rise (1958–2023)→ +100 ppm
 
 ## 🌐 Live Project Website
 
-👉 **[View the full report and visualisations here](https://YOUR-USERNAME.github.io/climate-change)**
+👉 **[View the full report and visualisations here](https://sajanyerra.github.io/climate-change)**
 
 The GitHub Pages site includes:
 - Full project write-up
